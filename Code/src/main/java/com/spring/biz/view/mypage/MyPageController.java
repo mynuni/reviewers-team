@@ -43,14 +43,9 @@ public class MyPageController {
 	// 마이페이지 홈
 	@GetMapping
 	public String mypageHome(HttpSession session, SearchCriteria criteria, Model model) {
-		UserVO loginUser = (UserVO) session.getAttribute("User");
-		if (loginUser == null) {
-			return "redirect:/";
-		}
-
 		criteria.setPerPageNum(5);
 		criteria.calculateRowNum();
-		String userId = loginUser.getUserId();
+		String userId = getUserIdFromSession(session);
 		PageMaker pageMaker = new PageMaker(criteria, myContentsService.countAllMyLike(criteria, userId));
 		getContentInfo info = new getContentInfo();
 
@@ -88,8 +83,7 @@ public class MyPageController {
 	// 나의 관심 컨텐츠 목록
 	@GetMapping("/myfavorite")
 	public String getMyLikeContents(SearchCriteria criteria, HttpSession session, Model model) {
-		UserVO user = (UserVO) session.getAttribute("User");
-		String userId = user.getUserId();
+		String userId = getUserIdFromSession(session);
 		criteria.calculateRowNum();
 
 		PageMaker pageMaker = new PageMaker(criteria, myContentsService.countAllMyLike(criteria, userId));
@@ -109,8 +103,7 @@ public class MyPageController {
 	// 내가 평가한 컨텐츠 목록
 	@GetMapping("/mystar")
 	public String getMyStarContents(SearchCriteria criteria, HttpSession session, Model model) {
-		UserVO user = (UserVO) session.getAttribute("User");
-		String userId = user.getUserId();
+		String userId = getUserIdFromSession(session);
 		criteria.calculateRowNum();
 
 		PageMaker pageMaker = new PageMaker(criteria, myContentsService.countAllMyStar(criteria, userId));
@@ -131,8 +124,7 @@ public class MyPageController {
 	// 내가 작성한 리뷰 목록
 	@GetMapping("/myreview")
 	public String getMyReview(SearchCriteria criteria, HttpSession session, Model model) {
-		UserVO user = (UserVO) session.getAttribute("User");
-		String userId = user.getUserId();
+		String userId = getUserIdFromSession(session);
 		criteria.calculateRowNum();
 
 		PageMaker pageMaker = new PageMaker(criteria, myContentsService.countAllMyReview(criteria, userId));
@@ -153,12 +145,6 @@ public class MyPageController {
 	// 회원정보 수정 폼
 	@GetMapping("/edit")
 	public String editForm(HttpSession session) {
-		UserVO loginUser = (UserVO) session.getAttribute("User");
-
-		if (loginUser == null) {
-			return "redirect:/";
-		}
-
 		return "/mypage/editUser";
 	}
 
@@ -172,6 +158,15 @@ public class MyPageController {
 		UserVO updatedUser = userService.findUserById(user.getUserId());
 		session.setAttribute("User", updatedUser);
 		return "redirect:/mypage/edit";
+	}
+
+	// 세션에서 유저 ID 가져오기
+	private String getUserIdFromSession(HttpSession session) {
+	    UserVO loginUser = (UserVO) session.getAttribute("User");
+	    if (loginUser != null) {
+	        return loginUser.getUserId();
+	    }
+	    return "redirect:/";
 	}
 
 	// 프로필 사진 업로드
