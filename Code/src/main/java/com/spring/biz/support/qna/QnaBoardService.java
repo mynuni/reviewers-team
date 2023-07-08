@@ -30,4 +30,6 @@ public interface QnaBoardService {
 	// 게시글 삭제
 	public void deleteBoard(int boardId);
 
+	public void calcViewCnt(int boardId);
+
 }
