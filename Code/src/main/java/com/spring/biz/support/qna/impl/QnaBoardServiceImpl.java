@@ -68,4 +68,11 @@ public class QnaBoardServiceImpl implements QnaBoardService {
 	public void deleteBoard(int boardId) {
 		qnaBoardDAO.deleteBoard(boardId);
 	}
+
+	// 조회수 처리
+	@Override
+	public void calcViewCnt(int boardId) {
+        qnaBoardDAO.calcViewCnt(boardId);
+		
+    }
 }
