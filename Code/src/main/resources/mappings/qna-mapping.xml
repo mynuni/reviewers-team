@@ -177,6 +177,13 @@
 		SET is_deleted = 'Y'
 		WHERE board_id = #{boardId}
 	</delete>
+
+	<!-- 조회수 처리 -->
+	<update id="calcViewCnt" parameterType="int">
+		UPDATE qna_board
+		SET view_cnt = view_cnt + 1
+		WHERE board_id = #{boardId}
+	</update>
     
     <!-- 첨부파일 조회 -->
     <select id="getUploadFiles" parameterType="int" resultMap="fileUploadResultMap">
