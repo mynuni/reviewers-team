@@ -113,6 +113,7 @@ public class QnaBoardController {
             String writerImg = qnaBoard.getUser().getProfileImg();
             model.addAttribute("writerImg", writerImg);
         }
+		calcViewCnt(boardId, request, response);
 		model.addAttribute("board", qnaBoard);
 		model.addAttribute("fileUploads", fileUploads);
 		
@@ -179,6 +180,31 @@ public class QnaBoardController {
 			throw new IllegalArgumentException("작성자와 관리자만 삭제할 수 있습니다.");
 		}
 
+	}
+
+	// 조회수 처리
+	private void calcViewCnt(int boardId, HttpServletRequest request, HttpServletResponse response) {
+	    String cookieName = "qna_view_" + boardId;
+	    boolean isViewed = false;
+
+	    Cookie[] cookies = request.getCookies();
+	    if (cookies != null) {
+	        for (Cookie cookie : cookies) {
+	            if (cookieName.equals(cookie.getName())) {
+	                isViewed = true;
+	                break;
+	            }
+	        }
+	    }
+
+	    if (!isViewed) {
+	        Cookie viewCookie = new Cookie(cookieName, "true");
+	        viewCookie.setMaxAge(86400); // 1일
+	        viewCookie.setPath("/");
+	        response.addCookie(viewCookie);
+
+	        qnaBoardService.calcViewCnt(boardId);
+	    }
 	}
 
 	// 파일 업로드 검증 메소드
