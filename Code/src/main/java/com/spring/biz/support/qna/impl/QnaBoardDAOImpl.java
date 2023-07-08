@@ -125,4 +125,10 @@ public class QnaBoardDAOImpl implements QnaBoardDAO {
 		sqlSession.insert(NAMESPACE + ".insertFileUpload", fileUploadVO);
 	}
 
+	// 조회수 처리
+	@Override
+	public void calcViewCnt(int boardId) {
+        sqlSession.update(NAMESPACE + ".calcViewCnt", boardId);
+    }
+
 }
