@@ -2,6 +2,9 @@ package com.spring.biz.view.support.qna;
 
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +101,7 @@ public class QnaBoardController {
 
 	// 글 조회
 	@GetMapping("{boardId}")
-	public String getBoard(@PathVariable int boardId, UserVO userVO, Model model, HttpSession session) {
+	public String getBoard(@PathVariable int boardId, UserVO userVO, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 		addUserToModelFromSession(session, model);
 
 		QnaBoardVO qnaBoard = qnaBoardService.getBoard(boardId);
