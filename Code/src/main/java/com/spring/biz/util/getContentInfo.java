@@ -2,30 +2,30 @@ package com.spring.biz.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
 
-import com.mysql.fabric.xmlrpc.base.Array;
 import com.spring.biz.movie.ContentsDetailVO;
-import com.spring.biz.movie.CreditsVO;
+import com.spring.biz.movie.CreditsVO;;
 
-import oracle.jdbc.proxy.annotation.GetDelegate;;
-
+@Component
 public class getContentInfo {
 	private final static String KEY = "f12f9b3cd2d170afcba68ce88803cbbb";
 	private static String result = "";
+	
+	@Cacheable(value = "apiCache")
 	public ContentsDetailVO getjsonObjectInfo(String type , int movieID) {
+		System.out.println("캐시 미 작동");
 		ContentsDetailVO vo = new ContentsDetailVO();
 		
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
